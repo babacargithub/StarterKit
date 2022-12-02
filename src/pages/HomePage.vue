@@ -5,7 +5,7 @@
       src="~assets/logo_Senapel.svg"
       style="width: 200px; height: 200px"
     >
-    <h3 class="text-center">Plateforme des appels d'offres au Sénégal</h3>
+    <h5 class="text-center">App description here</h5>
   </q-page>
 </template>
 
@@ -13,6 +13,6 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'IndexPage'
+  name: 'HomePage'
 })
 </script>

@@ -4,21 +4,22 @@ import loginCredentials from "src/repository/LoginCredentials";
 import Acheter from "pages/paiements/Acheter.vue";
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
-export default boot( ( { app} ) => {
+export default boot( ( { app, quasar} ) => {
   // something to do
   app.mixin({
     data() {
       return {
-        isConnected: loginCredentials.isConnected()
+        isConnected: loginCredentials.isConnected(),
+        isMobile:  app.config.globalProperties.$q.platform.is.mobile
       };
     },
     methods: {
       isAuthenticated (){
         return loginCredentials.isConnected()
       },
-      showLoading(){
+      showLoading(text = null){
         app.config.globalProperties.$q.loading.show({
-          message: 'Chargement....',
+          message: text == null ?'Chargement....': text,
           // boxClass: 'bg-grey-2 text-grey-9',
           spinnerColor: 'primary'
         })

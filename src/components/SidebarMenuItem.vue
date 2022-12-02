@@ -22,7 +22,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'EssentialLink',
+  name: 'SidebarMenuItem',
   props: {
     title: {
       type: String,

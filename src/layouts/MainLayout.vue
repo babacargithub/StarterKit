@@ -13,17 +13,16 @@
         />
 
         <q-toolbar-title>
-          Senapel SA
+         App Name
         </q-toolbar-title>
 
-        <q-btn icon="mdi-account" flat outline class="text-weight-light" to="/client">Mon compte </q-btn>
+        <q-btn v-if="! isMobile" icon="mdi-account" flat outline class="text-weight-light" to="/client">Mon compte </q-btn>
       </q-toolbar>
     </q-header>
     <q-footer elevated>
-      <q-toolbar>
-        <q-toolbar-title class="text-left text-weight-thin" @click="showDialog">@Copyright Senapel SA</q-toolbar-title>
-        <q-toolbar-title class="text-rifht text-weight-thin" @click="showDialog">Contact +221 77 330 08 53, email contact@senapel.com</q-toolbar-title>
-      </q-toolbar>
+     <q-tabs   indicator-color="white"  dense  v-if="isMobile" >
+         <q-route-tab  v-for="(tab, index) in tabMenuItems" :key="index" :label="tab.label" exact :icon="tab.icon" no-caps :to="tab.link"></q-route-tab>
+     </q-tabs>
     </q-footer>
     <q-drawer
       v-model="leftDrawerOpen"
@@ -64,7 +63,7 @@
             <q-card-section>
               <q-list>
 
-                <EssentialLink
+                <SidebarMenuItem
                   v-for="subitem in link.subItems"
                   v-bind="subitem"
                   :key="subitem.title"
@@ -84,87 +83,15 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-import moment from "moment";
-import Acheter from "pages/paiements/Acheter.vue";
-let today = moment().format('Y-M-D')
-let moisActuel = moment().format('M')
-let anneeActuel = moment().format('Y')
-const linksList = [
-  {
-    title: 'Aujourd\'hui',
-    caption: 'quasar.dev',
-    icon: 'ion-calendar',
-    link: '/parution/${today}/dans/soleil',
-    open: true,
-    subItems:[
-      {
-        title: 'Parus dans le Soleil',
-        caption: 'Les appels d\'offre',
-        icon: 'mdi-calendar',
-        link: `/parution/${today}/dans/soleil`,
-      },{
-        title: 'Les appels',
-        caption: 'Les appels d\'offre',
-        icon: 'book',
-        link: `/appels/${today}`,
-      },
-      {
-        title: "Avis d'attribution",
-        caption: 'Les avis d\'attribution',
-        icon: 'ion-trophy',
-        link: '/avis/'+today,
-      },
-      {
-        title: 'La Une des journaux',
-        caption: 'La une des journaux',
-        icon: 'mdi-newspaper',
-        link: '/la_une',
-      },
-    ]
-  },
-  {
-    title: 'Archives',
-    open: false,
-    caption: 'les archives',
-    icon: 'archive',
-    link: '/archive',
-    subItems:[
-      {
-        title: 'Archives',
-        caption: null,
-        icon: 'list',
-        link: `/archives/mois/${moisActuel}/annee/${anneeActuel}`,
-      }]
-  },
-  {
-    title: 'Services SENAC SA',
-    caption: 'forum.quasar.dev',
-    icon: 'mdi-account',
-    link: '/offres_senac',
-    open: false,
-    subItems: [
-      {
-        title: 'Les offres de SENAC SA',
-        caption: 'Détails des offres',
-        icon: 'mdi-cart',
-        link: '/offres_senac',
-      },
-      {
-        title: 'Contacts Senac',
-        caption: 'contacter SENAC',
-        icon: 'mdi-phone',
-        link: '/contact_senac',
-      },
-    ]
-  }
-]
+import SidebarMenuItem from 'components/SidebarMenuItem.vue'
+import sidebar_menu from './sidebar_menu_items'
+import tabMenuItems from './bottom_tabs_menu_items'
+
 
 export default defineComponent({
   name: 'MainLayout',
-
   components: {
-    EssentialLink
+    SidebarMenuItem
   },
 
   setup () {
@@ -172,8 +99,8 @@ export default defineComponent({
 
     return {
       alert: ref(false),
-      today: today,
-      essentialLinks: linksList,
+      essentialLinks: sidebar_menu,
+      tabMenuItems: tabMenuItems,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value

@@ -1,0 +1,29 @@
+// app global css in SCSS form
+@font-face {
+  font-family: Poppins;
+  src: url(../assets/fonts/Poppins/Poppins-Bold.ttf);
+}@font-face {
+  font-family: PoppinsExtraBold ;
+  src: url(../assets/fonts/Poppins/Poppins-ExtraBold.ttf);
+}
+.title-small{
+  font-size: 16px;
+}
+.title-medium{
+  font-size: 20px;
+}
+.title-big{
+  font-size: 26px;
+}
+.title-very-big{
+  font-size: 32px;
+  font-family: PoppinsExtraBold,serif;
+}
+.title-small, .title-medium, .title-big,{
+  font-family: Poppins, Serif, serif;
+  font-weight: bolder;
+}
+h1,h2,h3,h4,h5,h6{
+  font-family: "Poppins", serif;
+  color: var(--q-primary);
+}

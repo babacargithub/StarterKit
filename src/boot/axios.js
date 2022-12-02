@@ -52,7 +52,6 @@ export default boot(({ app, store}) => {
       config.headers = {
         'Authorization': `Bearer ${store.state.user_login.user.token}`,
         'Accept':'application/json',
-        'Client-Id': loginCredentials.getClientId(),
         'Content-Type':'application/json',
       }
       return config;

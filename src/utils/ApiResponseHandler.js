@@ -15,11 +15,8 @@ export  default  class ApiResponseHandler {
     isSuccessful(){
         return this.statusCode >= 200 && this.statusCode < 400
     }
-    isSuccessfulLogin(){
-        // return this.statusCode === 200
-        return this.statusCode === 200 && typeof this.getData().token !== 'undefined' && this.getData().token !== null
-    }
-    isSuccessCreated(){
+
+    isCreatedSuccessfully(){
         return this.statusCode === 201
     }
     isDeletedSuccessfully(){
@@ -31,76 +28,30 @@ export  default  class ApiResponseHandler {
     isUnauthorized(){
         return this.statusCode === 401
     }
-    notFound(){
+    isNotFound(){
         return this.statusCode === 404
     }
     isInternalServerError() {
         return this.statusCode === 500
     }
     isBadRequest(){
-        return (this.statusCode >= 400 && this.statusCode < 500) && ! this.isUnprocessableEntity()
+        return (this.statusCode >= 400 && this.statusCode < 500) && ! this.isUnprocessableEntity()&& ! this.isUnauthorized()
     }
-    getValidationErrors(){
-        return this.data.violations
-    }
-    getFlattenValidationErrors(){
-        let violations = this.getValidationErrors()
-        let flattenMessage = "";
-        for (let i = 0; i < violations.length; i++) {
-            const violation = violations[i];
-            flattenMessage += " "+this.flattenError(violation)
 
-        }
-        return flattenMessage;
-    }
-    flattenError(violation){
-        let message = violation.message
-        let propertyPath = violation.propertyPath
-        return  propertyPath.toUpperCase() + " : "+ message + "\n"
 
-    }
-    flattenErrorWithoutPath(violation){
-        let message = violation.message
-        return   message + "\n"
-
-    }
-    simplifiedError(violation){
-        return  violation.message
-
-    }
-    mapValidationErrorsToFields(fields, generalErrorMessage){
-        let violations = this.getValidationErrors()
-        for (let i = 0; i < violations.length; i++) {
-          let propertyPath = violations[i].propertyPath
-          let message = violations[i].message
-          // eslint-disable-next-line no-prototype-builtins
-          if (fields.hasOwnProperty(propertyPath)) {
-            fields[propertyPath].hasError = true
-            fields[propertyPath].message = message
-          }else{
-              generalErrorMessage.hasError = true
-              generalErrorMessage.message += " " + this.simplifiedError(violations[i]) +"\n"
-          }
-        }
-    }
     getData(){
         // eslint-disable-next-line no-prototype-builtins
         if (this.data.hasOwnProperty("hydra:member")){
             return this.data["hydra:member"]
+        }else if (this.data.hasOwnProperty("data")){
+            return this.data["data"]
         }else{
             return this.data;
         }
     }
-    data(){ return getData()
+    data(){ return this.getData()
     }
-    getResponseErrorMessage(){
-        if (this.isInternalServerError()){
-        let message = this.response.status+" : " + (this.response.statusText.toLowerCase().includes("Internal Server Error".toLocaleLowerCase())?'Une Erreur interne s\'est produite': this.response.statusText)
-           return message +" \n Veuillez nous signer cette erreur sur Whatsapp ou par SMS au 77 127 35 35"
-        }
-        return this.response.statusText;
 
-    }
 
 
 }

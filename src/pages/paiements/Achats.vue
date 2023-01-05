@@ -1,10 +1,10 @@
 <template>
-
+<h1>Les recharges dans votre compte</h1>
 </template>
 
 <script>
 export default {
-  name: "Achats"
+  name: "RechargesCompte"
 };
 </script>
 

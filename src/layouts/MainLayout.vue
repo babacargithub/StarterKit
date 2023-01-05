@@ -13,7 +13,7 @@
         />
 
         <q-toolbar-title>
-         App Name
+         DigiPress  SN
         </q-toolbar-title>
 
         <q-btn v-if="! isMobile" icon="mdi-account" flat outline class="text-weight-light" to="/client">Mon compte </q-btn>
@@ -24,20 +24,18 @@
          <q-route-tab  v-for="(tab, index) in tabMenuItems" :key="index" :label="tab.label" exact :icon="tab.icon" no-caps :to="tab.link"></q-route-tab>
      </q-tabs>
     </q-footer>
+
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
     >
-      <q-item-label
-        header
-      >
-
+      <q-item-label header>
         <img
           alt="Quasar logo"
-          src="~assets/logo_Senapel.svg"
+          src="public/icons/favicon-128x128.png"
           style="width: 50px; height: 50px"
-        > <span class="text-weight-bolder">Senapel</span>
+        > <span class="text-weight-bolder">DigiPress</span>
 
       </q-item-label>
 
@@ -53,7 +51,7 @@
               <q-icon :name="link.icon" color="primary" text-color="white" />
             </q-item-section>
 
-            <q-item-section class="text-weight-bold">
+            <q-item-section class="text-weight-bold" @click="handleMenuClick(link)">
               {{link.title}}
             </q-item-section>
 
@@ -72,7 +70,8 @@
             </q-card-section>
           </q-card>
         </q-expansion-item>
-      </template> </q-drawer>
+      </template>
+    </q-drawer>
 
     <q-page-container >
 
@@ -106,6 +105,15 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
-  }
+  },
+  methods: {
+    handleMenuClick(link) {
+      if (typeof  link.handlesClick != "undefined"){
+        if (link.handlesClick){
+          link.clickHandler();
+        }
+      }
+    }
+  },
 })
 </script>

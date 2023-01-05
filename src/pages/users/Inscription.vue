@@ -89,7 +89,7 @@ export default defineComponent({
 
     },
     update(client_id, client_data){
-      this.$axios.put('clients/'+client_id,client_data)
+      this.$axios.put('abonnes/'+client_id,client_data)
           .then((r)=>{
             if (r.isSuccessful()){
               this.showAlertSuccess('Votre compte a été mis à jour avec succès !',()=>{
@@ -114,9 +114,9 @@ export default defineComponent({
     },
     create(){
 
-      this.$axios.post('clients',this.client)
+      this.$axios.post('abonnes',this.client)
           .then((r)=>{
-            if (r.isSuccessCreated){
+            if (r.isSuccessCreated || r.isSuccessful()){
               this.showAlertSuccess('Votre compte a été crée avec succès !',()=>{
                 let client = r.getData()
                 loginCredentials.saveClient(client)

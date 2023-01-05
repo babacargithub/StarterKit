@@ -11,12 +11,14 @@ import loginCredentials from "src/repository/LoginCredentials";
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: 'https://admin.senapel.com/api/' })
+// export  const  BASE_SERVER_URL= process.env.NODE_ENV === "development"? "http://localhost:8888/DigiPress/DigiPressBackend/public/": 'https://digipress.golobone.net'
+export  const  BASE_SERVER_URL= process.env.NODE_ENV === "development"? "http://localhost:8888/DigiPress/DigiPressBackend/public/": "https://digipress.golobone.net/";
 
 export default boot(({ app, store}) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
   let config = {
     // baseURL: process.env.NODE_ENV === "development"?'http://localhost/senapel/public/api/':'https://golobone.net/go_travel_v4/public/api/'
-    baseURL: process.env.NODE_ENV === "development"?'http://localhost/senapel/public/api/':'https://admin.senapel.com/api/'
+    baseURL:  BASE_SERVER_URL + 'api/'
     // baseURL: process.env.NODE_ENV === "development"?'http://Localhost/GO_SYS_V4/public/api/':'http://192.168.1.17/GO_SYS_V4/public/api/'
     // timeout: 60 * 1000, // Timeout
   };
@@ -52,6 +54,7 @@ export default boot(({ app, store}) => {
       config.headers = {
         'Authorization': `Bearer ${store.state.user_login.user.token}`,
         'Accept':'application/json',
+        'Client-id': loginCredentials.getClientId(),
         'Content-Type':'application/json',
       }
       return config;

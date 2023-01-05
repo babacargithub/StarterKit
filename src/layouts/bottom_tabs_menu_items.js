@@ -1,16 +1,22 @@
 const tabMenuItems = [
   {
-    label: 'Menu 1',
-    icon: 'mdi-calendar',
-    link: '/'
+    label: 'La Une',
+    icon: 'mdi-newspaper',
+    link: '/la_une'
   },{
-    label: 'Menu 2',
-    icon: 'mdi-archive',
-    link: '/'
-  },{
-    label: 'Menu 3',
+    label: 'Résumés',
+    icon: 'mdi-note-text',
+    link: '/resumes'
+  },
+/*  {
+    label: 'Par thème',
     icon: 'mdi-tag',
-    link: '/'
+    link: '/themes'
+  },*/
+  {
+    label: 'Archives',
+    icon: 'mdi-archive',
+    link: '/archives'
   },
 ]
 export default tabMenuItems

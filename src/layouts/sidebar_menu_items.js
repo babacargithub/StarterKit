@@ -1,47 +1,55 @@
+import loginCredentials from "src/repository/LoginCredentials";
+import { routerInstance } from "boot/router";
+
 const menuItems = [
   {
-    title: 'Menu One',
-    caption: 'quasar.dev',
-    icon: 'ion-calendar',
-    link: '/',
-    open: true,
-    subItems:[
-      {
-        title: 'A title',
-        caption: 'A caption',
-        icon: 'mdi-calendar',
-        link: `/menu`,
-      }
-    ]
+    title: 'Mon compte',
+    caption: 'Détails compte',
+    icon: 'mdi-wallet',
+    link: '/mon-compte',
+    open: false,
+    handlesClick: true,
+    clickHandler: function (){
+      routerInstance.push({name:"mon-compte"})
+    }
   },
   {
-    title: 'Menu Two',
+    title: 'Partager à un ami',
     open: false,
-    caption: 'A caption',
-    icon: 'mdi-calendar',
+    icon: 'mdi-share',
     link: `/menu`,
-    subItems:[
-      {
-        title: 'Title',
-        caption: null,
-        icon: 'list',
-        link: `/titles`,
-      }]
+    handlesClick: true,
+    clickHandler: function (){
+        let text = `Je partage avec vous l'application DigiPress qui est très importante.
+        Elle permet d'acheter les journaux sénégalais et de les lire intégralement de façon digitale.
+         Elle résume toutes les émissions passées dans les télés ou dans la presse en ligne !.
+         Voici les lien de téléchargement:
+          -> PlayStore: https://play.google.com/id=golobone.digipress.sn
+          -> AppStore: https://play.google.com/id=golobone.digipress.sn
+         `
+        window.location.href = "https://wa.me/?text="+ text
+      },
+
+  },{
+    title: 'Nous contacter',
+    open: false,
+    icon: 'mdi-phone',
+    link: `/contacts`,
+    handlesClick: true,
+    clickHandler: function (){
+      routerInstance.push('/contacts')
+    }
   },
   {
-    title: 'Menu Three',
-    caption: 'forum.quasar.dev',
+    title: 'Déconnexion',
     icon: 'mdi-account',
-    link: '/offres_senac',
+    link: '/logout',
     open: false,
-    subItems: [
-      {
-        title: 'Title',
-        caption: null,
-        icon: 'list',
-        link: `/titles`,
-      }
-    ]
+    handlesClick: true,
+    clickHandler: function (){
+      loginCredentials.logout()
+      routerInstance.push('/')
+    }
   }
 ]
 export default menuItems

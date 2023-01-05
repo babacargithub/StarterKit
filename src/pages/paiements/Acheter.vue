@@ -1,63 +1,114 @@
 <template>
-<SnpDialog>
-  <q-card style="width: 80%">
+  <q-card>
 
     <div class="row">
-      <div class="column col-12 bg-grey-4 content-center " >
-        <img
-        alt="Quasar logo"
-        src="~assets/wave_logo.png"
-        style="width: 150px; height: 150px"
-      >
-      </div>
-      <div class="col-12">
-        <h4 class="text-center text-red-10" style="text-align: center; margin-bottom: 1px; line-height: normal">Contenu payant !</h4>
-        <p class="text-center text-weight-bolder">Vous devez faire un achat de &nbsp; <span class="title-big text-primary">{{ montant
-          }}F</span>  par Wave pour accéder à cette page</p>
-        <div class="column q-pa-lg col-lg-12 content-center">
-          <q-btn @click="submitPaiement" class="col-lg-12" stretch type="submit"  color="primary"  >Payer &nbsp;<span class="text-weight-bold">{{ montant }}F</span></q-btn>
-        <span class="q-ma-lg q-pa-lg text-primary text-center">Vous serez rediriger vers la page pour scanner le QR code pour valider le paiement</span>
+      <div class="column col-12 bg-grey-4 " >
+        <div class="q-pa-md">
+          <div class="row q-gutter-md">
+            <div class="q-pa-md">
+              <q-table
+                title="Sélectionnez les journaux à acheter"
+                :rows="parutions"
+                :columns="columns"
+                row-key="id"
+                selection="multiple"
+                hide-bottom
+                hide-header
+                no-data-label="Aucun journal à acheter"
+                hide-pagination
+                v-model:selected="selectedParutions"
+              >
+                <template v-slot:top>
+                  <span class="title-medium">Sélectionnez les journaux à acheter</span>
+
+                  <div class="" v-if="selectedParutions.length > 0">
+                    <div><span>Total : <span class="title-medium text-primary">{{ totalAPayer.toLocaleString() }}</span></span></div>
+                    <q-btn no-caps stretch push rounded color="primary" @click="submitPaiement">
+                      <img alt="Logo Wave" src="~assets/wave_logo.png"  style="width: 50px; height: 50px"
+                      >
+                      Payer : {{ totalAPayer }}</q-btn>
+
+                  </div>
+                </template>
+                <template v-slot:body-cell-image_la_une="props">
+                  <q-td><img
+                    alt="Quasar logo"
+                    :src="props.row.image_la_une"
+                    style="width: 150px; height: 150px"
+                  ></q-td>
+                </template>
+              </q-table>
+
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </q-card>
-</SnpDialog>
 </template>
 
 <script>
 import SnpDialog from "components/SnpDialog.vue";
 import PrimaryButton from "components/PrimaryButton.vue";
 import loginCredentials from "src/repository/LoginCredentials";
+import {BASE_SERVER_URL} from "boot/axios";
+import moment from "moment";
 export default {
   name: "AcheterParution",
   props: {
-    parution: {type: Object, required: true}
+    parutionDate: {type: String, required: true}
   },
-  components: {  SnpDialog },
+  components: {  },
   data() {
     return {
-      montant: this.parution.prix,
+      columns : [
+        { name: 'image_la_une', label: 'Aperçu', field: 'image_la_une' },
+      ],
+      parutions:[],
+      selectedParutions: [],
       telephone: loginCredentials.getClient().telephone,
     };
   },
   methods: {
     submitPaiement() {
-      this.$axios.get(`paiements/${this.parution.id}/link`).
+      this.$axios.post(`payer`, {parutions: this.selectedParutions}).
         then(r=>{
           if (r.isSuccessful()){
-            let url = r.getData().wave_launch_url;
-            if (typeof  url !=="undefined" && url !=="") {
-              window.location.href = url;
-            }
-            else {
-              console.log(r);
-              this.showAlertError("Impossible de lancer le paiement Wave, une erreur s'est produite")
-            }
+            this.$router.push({name:"la_une"})
+            //todo implement later
+            // let url = r.getData().wave_launch_url;
+            // if (typeof  url !=="undefined" && url !=="") {
+            //   window.location.href = url;
+            // }
+            // else {
+            //   console.log(r);
+            //   this.showAlertError("Impossible de lancer le paiement Wave, une erreur s'est produite")
+            // }
           }
       }).catch(()=>{
         this.showAlertError("Une erreur s'est produite !")
       })
     }
+  },
+  computed: {
+    totalAPayer() {
+      let selected =  this.selectedParutions.map((item)=>{ return item.prix})
+      return this.selectedParutions.length === 0? 0: selected.reduce((total, item) => total + item);
+
+    }
+  },
+  mounted() {
+    this.$axios.get(`parutions/${moment().format('YYYY-MM-DD')}`)
+      .then((response)=>{
+        this.parutions = response.data
+        this.parutions.map((item)=>{
+          item["image_la_une"] = BASE_SERVER_URL+ item.image_la_une
+          return item
+        })
+        this.parutions = this.parutions.filter((item)=>{ return item.achete === false})
+
+      })
   }
 };
 </script>

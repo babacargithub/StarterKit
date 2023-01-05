@@ -1,0 +1,7 @@
+{
+  "appId": "golobone.digipress.sn",
+  "appName": "Digi Press",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

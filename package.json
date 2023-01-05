@@ -1,8 +1,8 @@
 {
-  "name": "senapel",
+  "name": "digipress",
   "version": "0.0.1",
-  "description": "Plateforme des Appels D'offres",
-  "productName": "Senapel",
+  "description": "Acheter et lire les journaux sénégalais en ligne",
+  "productName": "Digi Press",
   "author": "babacargithub <46243872+babacargithub@users.noreply.github.com>",
   "private": true,
   "scripts": {

@@ -28,9 +28,7 @@
     isConnected(){
         return Boolean(Number(localStorage.getItem('est_connecte')))
     }
-    canClientSeeParution(parution){
-      return parution.achete === true
-    }
+
 }
 let loginCredentials = new LoginCredentials()
 

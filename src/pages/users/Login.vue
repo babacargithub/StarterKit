@@ -24,8 +24,8 @@
 <!--      Otp code section -->
       <q-card-section v-if="this.shouldShowOtpInput">
         <form v-if="this.shouldShowOtpInput" @submit.prevent="checkOtpCode">
-          <span>Veuillez saisir le code de vérification recu par SMS sur le numéro {{telephone}}</span>
-          <q-input  required type="number"  rounded outlined inputmode="number" minlength="9" maxlength="9" placeholder="Code de 6 chiffres" @keyup="errors.otp_code = null"  label="Code OTP" :error="errors.otp_code != null" :error-message="errors.otp_code" v-model.number="otp_code">
+          <span>Veuillez saisir le code de vérification reçu par SMS sur le numéro {{telephone}}</span>
+          <q-input  required type="number"  rounded outlined inputmode="number" minlength="9" maxlength="9" placeholder="Code de 6 chiffres" @keyup="errors.otp_code = null"  label="Code OTP" :error="errors.otp_code != null" :error-message="errors.otp_code" v-model="otp_code">
           </q-input>
           <primary-button outline class="q-mr-lg" color="secondary" type="submit" >Verifier Code OTP</primary-button>
         </form>
@@ -36,6 +36,7 @@
 <!--    Afficher client section si le client est connecté -->
     <div v-else class="q-ma-lg">
       <span class="text-weight-bolder">Vous êtes connecté</span>
+      <q-btn color="primary" stretch class="text-weight-bolder" @click="deconnexion">Déconnexion</q-btn>
         <AfficherClient :client="client" v-if="client != null" />
 
     </div>
@@ -141,25 +142,26 @@ export default defineComponent({
             // User signed in successfully.
             this.hideLoading()
             const user = result.user;
-            this.$axios.get(`clients/phone_number/${this.telephone}`).
+            this.$axios.get(`abonnes/phone_number/${this.telephone}`).
             then((r)=>{
               // if client exists
               if (r.isSuccessful()){
                 //client exists
                 loginCredentials.setAsLoggedIn()
                 let client = r.getData();
-                if (typeof client.nom_complet =='undefined' || typeof client.telephone =='undefined' || typeof client.telephone =='undefined' ){
-                  this.showAlertError("Impossible de sauvegarder les données de connexion, une erreur s'est produite ! ")
+                if (typeof client.prenom =='undefined' && typeof client.telephone =='undefined' ){
+                  loginCredentials.logout()
+                  this.showAlertError("Impossible de sauvegarder les données de connexion, une erreur  serverur s'est produite ! ")
                 }else {
                   loginCredentials.saveClient(client)
-                  this.$router.push('/')
+                  this.$router.push(this.$route.query.redirect)
 
                 }
               }
               // client n'existe pas, on affiche le formulaire d'inscription
 
             }).catch(e=>{
-              if (e.notFound()){
+              if (e.isNotFound()){
                 this.creerCompte()
               }
               else {

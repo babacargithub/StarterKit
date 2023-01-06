@@ -50,6 +50,11 @@ const routes = [
         props: true,
         component: () => import('pages/resumes/AfficherResume.vue')
       },{
+        path: 'creer_abonnement',
+        name: "nouvel_abonnement",
+        props: true,
+        component: () => import('pages/users/CreerAbonnement.vue')
+      },{
         path: 'archives',
         component: () => import('pages/les_unes/ArchivesList.vue')
       },

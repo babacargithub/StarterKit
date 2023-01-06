@@ -4,6 +4,7 @@
       <span class="text-white">Solde</span>
       <span class="title-medium text-white"> 0F</span>
     <q-btn color="primary" no-caps>Recharger mon compte</q-btn>
+    <q-btn color="primary" no-caps @click="$router.push({name:'nouvel_abonnement'})">S'abonner</q-btn>
   </div>
   <div class="column col-xs-12 q-mt-lg">
     <TransactionItem :transactions="transactions"/>

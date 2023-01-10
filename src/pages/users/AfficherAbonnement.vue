@@ -2,7 +2,11 @@
 
 <div class="row items-end q-pa-lg q-col-gutter-xs ">
   <p class="text-bold">Votre abonnement expire le : </p>
-  <p v-if="abonnement != null">{{abonnement.date_expiration}}</p>
+  <template v-if="abonnement != null">
+    <p>{{ abonnement.date_expiration }}</p>
+    <p>Formule: {{ abonnement.formule.nom }}</p>
+    <p>Prix: {{ abonnement.formule.prix }}</p>
+  </template>
 
 </div>
 </template>

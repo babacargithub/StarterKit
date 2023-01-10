@@ -8,7 +8,9 @@
   </div>
   <div class="column col-xs-12 q-mt-lg">
     <p class="q-mb-lg title-medium text-primary">Abonnement</p>
-    <AfficherAbonnement />
+    <q-card>
+      <AfficherAbonnement/>
+    </q-card>
   </div>
     <div class="column col-xs-12 q-mt-lg">
     <TransactionItem :transactions="transactions"/>

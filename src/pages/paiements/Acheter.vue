@@ -43,7 +43,7 @@
                 </q-card>
 
               </div>
-              <div class="row q-mt-lg q-gutter-xs" v-if="soldeInsuffisant">
+              <div class="row q-mt-lg q-gutter-xs" v-if="soldeInsuffisant && selectedParutions.length > 0">
 
                 <p class="text-primary bg-white rounded-borders q-pa-lg">
                   <q-icon name="mdi-alert" size="lg"></q-icon>

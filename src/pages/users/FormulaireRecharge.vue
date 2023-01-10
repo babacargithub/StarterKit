@@ -70,7 +70,7 @@ export default defineComponent({
             this.showAlertSuccess("Paiement lancé",()=>{
             let url = response.data.launch_url
             this.$emit('hide');
-            window.href = "capture://wave:"+url
+              window.location.href = url
             })
           } catch (e) {
             console.log(e)

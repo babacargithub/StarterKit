@@ -1,7 +1,6 @@
 <template>
   <q-card>
 
-    <div class="row">
       <div class="column col-12 bg-grey-4 " >
         <div class="q-pa-md">
           <div class="row q-gutter-md">
@@ -21,14 +20,7 @@
                 <template v-slot:top>
                   <span class="title-medium">Sélectionnez les journaux à acheter</span>
 
-                  <div class="" v-if="selectedParutions.length > 0">
-                    <div><span>Total : <span class="title-medium text-primary">{{ totalAPayer.toLocaleString() }}</span></span></div>
-                    <q-btn no-caps stretch push rounded color="primary" @click="submitPaiement">
-                      <img alt="Logo Wave" src="~assets/wave_logo.png"  style="width: 50px; height: 50px"
-                      >
-                      Payer : {{ totalAPayer }}</q-btn>
 
-                  </div>
                 </template>
                 <template v-slot:body-cell-image_la_une="props">
                   <q-td><img
@@ -38,13 +30,36 @@
                   ></q-td>
                 </template>
               </q-table>
+              <div class="col-xs-6 q-mt-lg" v-if="selectedParutions.length > 0">
+                <q-card class="q-pa-lg">
+                  <p >
+                    <span class="title-big bg-black text-white">Total : </span>
+                    <span class="q-ml-lg title-very-big text-primary bg-white">{{ totalAPayer.toLocaleString() }}F</span>
+                  </p>
+                  <q-btn class="" v-if="selectedParutions.length > 0 && ! soldeInsuffisant" no-caps rounded color="primary"
+                         @click="submitPaiement">
+                    Valider l'achat
+                  </q-btn>
+                </q-card>
 
+              </div>
+              <div class="row q-mt-lg q-gutter-xs" v-if="soldeInsuffisant">
+
+                <p class="text-primary bg-white rounded-borders q-pa-lg">
+                  <q-icon name="mdi-alert" size="lg"></q-icon>
+                  Votre solde DigiPress est insuffisant ! Vous devez recharger d'abord votre compte avant de pouvoir faire un chat
+
+                  <q-btn class="q-mt-md" no-caps outline rounded color="primary" @click="submitPaiement">
+                    Réessayer
+                  </q-btn>
+                </p>
+
+              </div>
 
             </div>
           </div>
         </div>
       </div>
-    </div>
   </q-card>
 </template>
 
@@ -67,28 +82,34 @@ export default {
       ],
       parutions:[],
       selectedParutions: [],
-      telephone: loginCredentials.getClient().telephone,
+      soldeInsuffisant: false,
     };
   },
   methods: {
     submitPaiement() {
-      this.$axios.post(`payer`, {parutions: this.selectedParutions}).
-        then(r=>{
-          if (r.isSuccessful()){
-            this.$router.push({name:"la_une"})
-            //todo implement later
-            // let url = r.getData().wave_launch_url;
-            // if (typeof  url !=="undefined" && url !=="") {
-            //   window.location.href = url;
-            // }
-            // else {
-            //   console.log(r);
-            //   this.showAlertError("Impossible de lancer le paiement Wave, une erreur s'est produite")
-            // }
+      this.$axios.post("comptes_abonne/:id/solde_disponible".replace(":id", loginCredentials.getClientId()), {montant: this.totalAPayer})
+        .then(response =>{
+          if (response.isSuccessful()){
+            let data = response.getData()
+            if (data.solde_disponible){
+              this.$axios.post(`payer`, {parutions: this.selectedParutions}).
+              then(r=>{
+                if (r.isSuccessful()){
+                  this.$router.push({name:"la_une"})
+                }
+              }).catch(()=>{
+                this.showAlertError("Une erreur s'est produite !")
+              })
+
+            }else {
+              this.soldeInsuffisant = true
+              this.showAlertError("Votre solde est insuffisant ! Rechargez votre compte pour continuer",()=>{
+                this.afficherFormulaireRecharge()
+              })
+            }
           }
-      }).catch(()=>{
-        this.showAlertError("Une erreur s'est produite !")
-      })
+        })
+
     }
   },
   computed: {

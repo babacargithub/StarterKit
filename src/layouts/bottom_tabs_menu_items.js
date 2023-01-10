@@ -1,6 +1,6 @@
 const tabMenuItems = [
   {
-    label: 'La Une',
+    label: 'Journaux',
     icon: 'mdi-newspaper',
     link: '/la_une'
   },{

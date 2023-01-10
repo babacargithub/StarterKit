@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-md">
-    <p class="q-mb-lg title-medium text-primary">Historique transactions</p>
+    <p class="q-mb-lg title-medium text-primary">Historique achats</p>
     <q-list bordered class="rounded-borders">
 
       <template v-for="(transaction, index ) in transactions" :key="index">
-        <q-item >
+        <q-item class="bg-white" >
           <q-item-section avatar>
             <q-avatar>
               <img

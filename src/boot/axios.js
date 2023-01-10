@@ -2,7 +2,9 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import ApiResponseHandler from "../utils/ApiResponseHandler";
 import loginCredentials from "src/repository/LoginCredentials";
+import { Notify } from 'quasar'
 
+// or with a config object:
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -74,9 +76,28 @@ export default boot(({ app, store}) => {
     error => {
       req.done();
       error.response = new ApiResponseHandler(error.response)
+
+
       if (error.response.isUnauthorized()){
-      }else if(error.response.isInternalServerError()) {
-        store.dispatch(`${actionScope}/showErrorOccurred`);
+      }
+
+      else if(error.response.isNotFound()) {
+        Notify.create({
+          message: `Une erreur de type "Introuvable" est rencontrée par la requête!`,
+          icon: "error",
+          color: 'primary',
+          position:"center"
+        })
+      }
+      else if(error.response.isInternalServerError()) {
+        Notify.create({
+          message: `Une erreur s'est produite au niveau du serveur, la requête n'a pas abouti`,
+          icon: "error",
+          color: 'secondary',
+          position:"center",
+          textColor: "primary",
+          timeout: 1500
+        })
 
       }
 

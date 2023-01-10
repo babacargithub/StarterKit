@@ -26,4 +26,36 @@
 h1,h2,h3,h4,h5,h6{
   font-family: "Poppins", serif;
   color: var(--q-primary);
+  line-height: 20px;
+}
+.swal-modal {
+  background-color: white;
+  border: 3px solid red;
+}
+.swal-text {
+  padding: 17px;
+  display: block;
+  margin: 22px;
+  text-align: center;
+  color: black;
+}
+
+.swal-button {
+  padding: 7px 19px;
+  border-radius: 2px;
+  background-color: var(--q-primary);
+  font-size: 12px;
+  border: 1px solid darkred;
+  color: white;
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
+}
+.swal-button--confirm {
+  padding: 7px 19px;
+  border-radius: 2px;
+  background-color: white;
+  font-size: 12px;
+  color: black;
+
+  border: 1px solid var(--q-primary);
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
 }

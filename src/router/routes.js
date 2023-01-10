@@ -52,8 +52,19 @@ const routes = [
       },{
         path: 'creer_abonnement',
         name: "nouvel_abonnement",
+        meta: {
+          requiresAuth: true
+        },
         props: true,
         component: () => import('pages/users/CreerAbonnement.vue')
+      },{
+        path: 'mon_abonnement',
+        name: "afficher_abonnement",
+        meta: {
+          requiresAuth: true
+        },
+        props: true,
+        component: () => import('pages/users/AfficherAbonnement.vue')
       },{
         path: 'archives',
         component: () => import('pages/les_unes/ArchivesList.vue')

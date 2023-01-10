@@ -52,6 +52,4 @@ export  default  class ApiResponseHandler {
     data(){ return this.getData()
     }
 
-
-
 }

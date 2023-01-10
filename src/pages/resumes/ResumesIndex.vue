@@ -1,8 +1,9 @@
 <template>
 <h6 class="q-ma-lg">Résumé des émissions les plus importantes </h6>
   <template v-for="(resume,index) in resumes " :key="index">
-    <q-card >
-      <q-card-section class="text-center bg-grey-4"><span class="title-small text-black ">{{ resume.titre }}</span>
+    <q-card class="q-ma-lg" >
+      <q-card-section class="text-center bg-red-3">
+        <span class="title-small text-black ">{{ resume.titre }}</span>
       </q-card-section>
       <q-separator></q-separator>
       <q-card-section>
@@ -11,7 +12,13 @@
       </q-card-section>
       <q-separator></q-separator>
       <q-card-section>
-        <q-btn class="" color="primary" rounded @click="afficherResume(resume)">Afficher</q-btn>
+        <q-btn v-if="estAbonne" class="" color="primary" rounded @click="afficherResume(resume)">Afficher</q-btn>
+        <template v-else >
+          <p class="text-primary text-bold">Vous n'êtes pas encore abonné ! </p>
+          <p>Ce contenu est payant !
+            Vous devez vous abonner pour accéder aux résumés</p>
+          <q-btn color="primary" no-caps @click="$router.push({name:'nouvel_abonnement'})">S'abonner</q-btn>
+        </template>
       </q-card-section>
     </q-card>
 

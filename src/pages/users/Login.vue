@@ -142,8 +142,8 @@ export default defineComponent({
             // User signed in successfully.
             this.hideLoading()
             const user = result.user;
-            this.$axios.get(`abonnes/phone_number/${this.telephone}`).
-            then((r)=>{
+            this.$axios.get(`abonnes/phone_number/${this.telephone}`)
+              .then((r)=>{
               // if client exists
               if (r.isSuccessful()){
                 //client exists
@@ -151,7 +151,7 @@ export default defineComponent({
                 let client = r.getData();
                 if (typeof client.prenom =='undefined' && typeof client.telephone =='undefined' ){
                   loginCredentials.logout()
-                  this.showAlertError("Impossible de sauvegarder les données de connexion, une erreur  serverur s'est produite ! ")
+                  this.showAlertError("Impossible de sauvegarder les données de connexion, une erreur  serveur s'est produite ! ")
                 }else {
                   loginCredentials.saveClient(client)
                   this.$router.push(this.$route.query.redirect)
@@ -160,8 +160,8 @@ export default defineComponent({
               }
               // client n'existe pas, on affiche le formulaire d'inscription
 
-            }).catch(e=>{
-              if (e.isNotFound()){
+            }).catch((error)=>{
+              if (error.isNotFound()){
                 this.creerCompte()
               }
               else {

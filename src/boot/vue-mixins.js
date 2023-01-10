@@ -2,6 +2,7 @@ import { boot } from 'quasar/wrappers'
 import swal from "sweetalert";
 import loginCredentials from "src/repository/LoginCredentials";
 import Acheter from "pages/paiements/Acheter.vue";
+import FormulaireRecharge from "pages/users/FormulaireRecharge.vue";
 // "async" is optional;
 // more info on params: https://v2.quasar.dev/quasar-cli/boot-files
 export default boot( ( { app, quasar} ) => {
@@ -10,7 +11,9 @@ export default boot( ( { app, quasar} ) => {
     data() {
       return {
         isConnected: loginCredentials.isConnected(),
-        isMobile:  app.config.globalProperties.$q.platform.is.mobile
+        isMobile:  app.config.globalProperties.$q.platform.is.mobile,
+        client: loginCredentials.getClient(),
+        estAbonne: loginCredentials.estAbonne()
       };
     },
     methods: {
@@ -33,7 +36,8 @@ export default boot( ( { app, quasar} ) => {
           text: message,
           icon: 'success',
         }).then(value =>{
-          onClose()
+          if (typeof onClose != "undefined")
+            onClose()
         })
 
       },
@@ -43,19 +47,43 @@ export default boot( ( { app, quasar} ) => {
         text: message != null && typeof message != 'undefined' ? message: 'Une erreur s\'est produite',
         icon: 'error',
       }).then(value =>{
-        onClose()
+        if (typeof onClose != "undefined")
+          onClose()
       })
       },
-      showConfirm(title,message, whenYes, whenNo) {
-        console.log(message, whenYes, whenNo)
+      showConfirm(message, whenYes, whenNo) {
 
+        swal({
+          title: "Confirmer",
+          text: message,
+          icon: 'warning',
+          buttons: {
+            cancel: true,
+            confirm: "Confirmer",
+          },
+        }).then((result) => {
+          if (result) {
+            whenYes()
+          }
+        });
       },
       afficherFormulaireAchat(propsArgs){
         app.config.globalProperties.$q.dialog({
           component: Acheter,
           componentProps: propsArgs
         })
-      }
+      },
+      afficherFormulaireRecharge(){
+        app.config.globalProperties.$q.dialog({
+          component: FormulaireRecharge,
+          componentProps: {
+            compte_id: this.client.id,
+          },
+          maximized: true,
+          transitionShow: "fadeIn"
+
+        })
+      },
     },
 
   })

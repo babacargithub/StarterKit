@@ -1,10 +1,10 @@
 const tabMenuItems = [
   {
-    label: 'Journaux',
+    label: 'Home Page',
     icon: 'mdi-newspaper',
     link: '/la_une'
   },{
-    label: 'Résumés',
+    label: 'Menu Item',
     icon: 'mdi-note-text',
     link: '/resumes'
   },
@@ -14,7 +14,7 @@ const tabMenuItems = [
     link: '/themes'
   },*/
   {
-    label: 'Archives',
+    label: 'Menu Item',
     icon: 'mdi-archive',
     link: '/archives'
   },

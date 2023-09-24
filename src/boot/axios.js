@@ -1,22 +1,21 @@
-import { boot } from 'quasar/wrappers'
-import axios from 'axios'
+import { boot } from "quasar/wrappers";
+import axios from "axios";
 import ApiResponseHandler from "../utils/ApiResponseHandler";
-import loginCredentials from "src/repository/LoginCredentials";
-import { Notify } from 'quasar'
+import { Notify } from "quasar";
 
 // or with a config object:
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
 // If any client changes this (global) instance, it might be a
-// good idea to move this instance creation inside of the
+// good idea to move this instance creation inside the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: 'https://admin.senapel.com/api/' })
+const api = axios.create({ baseURL: 'https://app.polex.tech/api' })
 // export  const  BASE_SERVER_URL= process.env.NODE_ENV === "development"? "http://localhost:8888/DigiPress/DigiPressBackend/public/": 'https://digipress.golobone.net'
-export  const  BASE_SERVER_URL= process.env.NODE_ENV === "development"? "http://localhost:8888/DigiPress/DigiPressBackend/public/": "https://digipress.golobone.net/";
+export  const  BASE_SERVER_URL= process.env.NODE_ENV === "development"? "http://localhost:8888/Polex/PolexBackend/public/": "https://app.polex.tech/";
 
-export default boot(({ app, store}) => {
+export default boot(({ app, store, router}) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
   let config = {
     // baseURL: process.env.NODE_ENV === "development"?'http://localhost/senapel/public/api/':'https://golobone.net/go_travel_v4/public/api/'
@@ -49,16 +48,16 @@ export default boot(({ app, store}) => {
   };
   _axios.interceptors.request.use(
     config => {
+      // noinspection JSUnresolvedReference
       if (typeof config.shouldNotShowLoadingIndicator === 'undefined' &&  !config.shouldNotShowLoadingIndicator){
         req.pending();
       }
 
-      config.headers = {
-        'Authorization': `Bearer ${store.state.user_login.user.token}`,
-        'Accept':'application/json',
-        'Client-id': loginCredentials.getClientId(),
-        'Content-Type':'application/json',
-      }
+      config.headers["Accept"] = 'application/json'
+      config.headers["Accept"] = 'application/json'
+      typeof config.headers['Authorization'] ==="undefined" || config.headers['Authorization'] === null ?  config.headers['Authorization'] = `Bearer ${store.state.user_login.user.token}`:'';
+
+
       return config;
     },
     error => {
@@ -75,33 +74,50 @@ export default boot(({ app, store}) => {
     },
     error => {
       req.done();
-      error.response = new ApiResponseHandler(error.response)
 
 
-      if (error.response.isUnauthorized()){
-      }
-
-      else if(error.response.isNotFound()) {
+      if (error.code === "ECONNABORTED"){
         Notify.create({
-          message: `Une erreur de type "Introuvable" est rencontrée par la requête!`,
+          message: `Pas de réponse, vérifiez votre connexion et votre passe internet !`,
           icon: "error",
-          color: 'primary',
-          position:"center"
-        })
-      }
-      else if(error.response.isInternalServerError()) {
-        Notify.create({
-          message: `Une erreur s'est produite au niveau du serveur, la requête n'a pas abouti`,
-          icon: "error",
-          color: 'secondary',
-          position:"center",
-          textColor: "primary",
+          color: 'red',
+          position: "center",
+          textColor: "white",
           timeout: 1500
         })
+      }
+      const {Cancel} = axios
+      if (error instanceof Cancel){
+        return Promise.reject(error)
 
       }
+      if (error.response) {
 
-      return Promise.reject(error.response);
+        error.response = new ApiResponseHandler(error.response);
+        if (error.response.isUnauthorized()) {
+          if (typeof error.response.getData().message != "undefined" && error.response.getData().message.toLowerCase() === "Unauthenticated.".toLowerCase()) {
+            router.push("login");
+          }
+        }
+        else if (error.response.isNotFound()) {
+
+        } else if (error.response.isInternalServerError()) {
+          Notify.create({
+            message: `Une erreur s'est produite au niveau du serveur, la requête n'a pas abouti`,
+            icon: "error",
+            color: "red",
+            position: "center",
+            textColor: "white",
+            timeout: 1500
+          });
+
+        }
+
+        return Promise.reject(error.response);
+      } else {
+        return Promise.reject(error.response);
+
+      }
     }
   );
 

@@ -1,6 +1,6 @@
-# DesktopSenapel (quasar-project)
+# Golob Soft SARL starter project for Quasar based apps
 
-Plateforme des Appels D'offres
+We use this template to quick start our projects
 
 ## Install the dependencies
 ```bash

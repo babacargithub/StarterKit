@@ -1,10 +1,12 @@
 // app global css in SCSS form
+@import 'quasar/src/css/index.sass'; // Adjust the path if necessary
+
 @font-face {
   font-family: Poppins;
   src: url(../assets/fonts/Poppins/Poppins-Bold.ttf);
 }
 @font-face {
-  font-family: PoppinsExtraBold ;
+  font-family: PoppinsExtraBold;
   src: url(../assets/fonts/Poppins/Poppins-ExtraBold.ttf);
 }
 @font-face {
@@ -19,27 +21,33 @@
   font-family: PoppinsLight;
   src: url(../assets/fonts/Poppins/Poppins-Light.ttf);
 }
-.title-small{
+.title-small {
   font-size: 16px;
 }
-.title-medium{
+.title-medium {
   font-size: 20px;
 }
-.title-big{
+.title-big {
   font-size: 26px;
 }
-.title-very-big{
+.title-very-big {
   font-size: 32px;
-  font-family: PoppinsExtraBold,serif;
+  font-family: PoppinsExtraBold, serif;
 }
-.title-small, .title-medium, .title-big,{
+.title-small,
+.title-medium,
+.title-big {
   font-family: Poppins, Serif, serif;
   font-weight: bolder;
 }
-h1,h2,h3,h4,h5,h6{
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "Poppins", serif;
   color: var(--q-primary);
-  line-height: 20px;
 }
 .swal-modal {
   background-color: white;
@@ -71,4 +79,19 @@ h1,h2,h3,h4,h5,h6{
 
   border: 1px solid var(--q-primary);
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
+}
+.rounded-borders {
+  border-radius: 15px;
+}
+.primary-shadow {
+  box-shadow: 0 3px 6px var(--q-primary); /* Change the color here */
+  /* Other styles for your element */
+}
+.booking-form-label {
+  @extend .text-weight-bold ;
+  @extend .text-primary ;
+}
+.fcfa{
+  font-size: 19px;
+  font-weight: bold;
 }
